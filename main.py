@@ -33,6 +33,30 @@ class Schrodinger(object):
 def gaussian(x, mean, std, k0):
     return np.exp(-((x-mean)**2)/(4*std**2)+ 1j*x*k0)/(2*np.pi*std**2)**0.25
 
+def plotting_gif(wave_packet):
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    ax.set_facecolor("black")
+
+    plt.title("Wave packet colliding against the potential barrier", fontsize=14, c="black")
+    plt.axvline(0, 0, 1, c="white", linestyle='--', label="potential barrier")
+    plt.legend()
+
+    bpm_plot, = ax.plot(x, wave_packet.bpm_method(psi_0, V, tf, dt, k), c="#9ADEEB")
+    psi_plot, = ax.plot(x, wave_packet.psi(psi_0, V, tf, dt), c="#6DDEEB")
+
+    def animate(i):
+        bpm_plot.set_data(x, wave_packet.bpm_method(psi_0, V, tf + i/25, dt, k))
+        psi_plot.set_data(x, wave_packet.psi(psi_0, V, tf + i/25, dt))
+        return bpm_plot, psi_plot
+
+    ani = animation.FuncAnimation(fig, animate, interval=20, blit=True, save_count=66)
+
+    ani.save("tunnelvision.gif")
+
+archive_path = os.path.abspath(os.path.dirname(__file__))
+os.chdir(archive_path)
+
 L = 400 # domain size
 N = 2000 # number of discret points
 dx = L/N # distance between points
@@ -40,7 +64,7 @@ dx = L/N # distance between points
 tf = 1.0 # final time
 dt = 0.01 # time steps size
 
-k = 2*np.pi*np.fft.fftfreq(N, d=dx) # wavenumber
+k = 2.0*np.pi*np.fft.fftfreq(N, d=dx) # wavenumber
 
 p0 = 2.0
 d = np.sqrt(N*dt/2.)
@@ -51,24 +75,4 @@ V = -110/np.cosh(x)**2
 
 s = Schrodinger(psi_0, V, tf, dt, dx, k)
 
-fig, ax = plt.subplots(figsize=(10, 4))
-
-plt.title("Wave packet colliding with a potential barrier", fontsize=14, c="#000000")
-
-plt.axvline(0, 0, 1, c="#000000", linestyle='--')
-
-bpm_plot, = ax.plot(x, s.bpm_method(psi_0, V, tf, dt, k), c="#6ED5FA")
-psi_plot, = ax.plot(x, s.psi(psi_0, V, tf, dt), c="#6B7CFA")
-
-def animate(i):
-    bpm_plot.set_data(x, s.bpm_method(psi_0, V, tf + i/25, dt, k))
-    psi_plot.set_data(x, s.psi(psi_0, V, tf + i/25, dt))
-    return bpm_plot, psi_plot
-
-ani = animation.FuncAnimation(fig, animate, interval=20, blit=True, save_count=66)
-
-p = os.path.abspath(sys.argv[0])
-archive_path, arq = os.path.split(p)
-os.chdir(archive_path)
-
-ani.save("tunnelvision.gif")
+plotting_gif(s)
