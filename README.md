@@ -1,6 +1,8 @@
 # visualquantumtunneling
-The principal objective of this project is provide a clear visualization of a wave packet crossing a potential barrier on quantum tunneling.  
+This project consists on a simple python program which its main objective relies on providing a clear visualization of what occurs when a wave packet collides against a potential barrier, or better saying, it's a visual device for quantum tunneling.
 
-Given a one-dimensional time dependent Schrödinger equation representing a wavefunction, it's possible to use the Split-Step Fourier Method to find its solution. On Optics context, it can be known as BPM (beam propagation method). Both Fourier Transform and Inverse Fourier Transform are actively used on this method. Since Numpy provides a module with the Fast Fourier Transform, this packet has been pretty much applied in our project.
+Although the problem solved here is a one-dimensional and linear one, the numerical method used for solving it is the Split-Step Fourier Method. Also known as BPM (beam propagation method) on the context of optics, it's usually finds it service on solving nonlinear partial differential equations.
 
-Initially developed as a final project for a python class by: Bianca Maia and Rafael Magioli.
+An one-dimensional Schrödinger equation will represent the wave packet given its quantum behaviour.
+
+Developed by: Bianca Maia and Rafael Magioli.
